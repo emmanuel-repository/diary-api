@@ -142,18 +142,23 @@ export default class ContactBusiness {
     }
   }
 
+  async existRegister(contatId: number): Promise<Contact | null> {
+    const exist = await db.Contact.findByPk(contatId, {
+      include: [
+        { model: db.Email, as: 'emails' },
+        { model: db.Phone, as: 'phones' }
+      ]
+    });
+    if (!exist) throw new NotFoundError("Contacto no encontrado");
+    return exist;
+  }
+
   private async ensureAliasIsUnique(alias: string, currentContactId?: number): Promise<void> {
     const exists = await db.Contact.findOne({
       where: { alias, ...(currentContactId ? { id: { [Op.ne]: currentContactId } } : {}) }
     });
 
     if (exists) throw new ConflictError('El alias ya se encuentra registrado por otro contacto');
-  }
-
-  private async existRegister(contatId: number): Promise<Contact | null> {
-    const exist = await db.Contact.findByPk(contatId);
-    if (!exist) throw new NotFoundError("Contacto no encontrado");
-    return exist
   }
 
   private async existEmail(emailId: number): Promise<Email> {

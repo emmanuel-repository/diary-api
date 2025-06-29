@@ -13,6 +13,17 @@ export default class ContactController {
 
   }
 
+  static async getRegisterById(req: Request, res: Response, next: any): Promise<any> {
+    try {
+      const {id} = req.params;
+      const contact = await this.contactBusiness.existRegister(Number(id));
+
+      return res.status(200).json(contact);
+    } catch (error) {
+      next(error)
+    }
+  }
+
   static async createContact(req: Request, res: Response, next: any): Promise<any> {
 
     try {
@@ -72,7 +83,7 @@ export default class ContactController {
     }
   }
 
-    static async deletePhone(req: Request, res: Response, next: any): Promise<any> {
+  static async deletePhone(req: Request, res: Response, next: any): Promise<any> {
 
     try {
 
