@@ -38,7 +38,7 @@ export default class ContactBusiness {
         const ext = path.extname(file.originalname);
         const safeAlias = contactData.alias.replace(/[^\w\-]/g, '_');
 
-        imageUrl = `public/uploads/${safeAlias}${ext}`
+        imageUrl = `${safeAlias}${ext}`
       };
 
       contactData = { ...contactData, profile_image: imageUrl };
@@ -96,6 +96,8 @@ export default class ContactBusiness {
 
   async updateContact(contactId: number, contactData: any, file: any): Promise<ContactDto> {
 
+    console.log(contactData);
+
     const t = await sequelize.transaction();
 
     try {
@@ -118,7 +120,9 @@ export default class ContactBusiness {
         imageUrl = `${safeAlias}${ext}`
       };
 
-      contactData.profile = imageUrl;
+     contactData = { ...contactData, profile_image: imageUrl };
+
+     console.log(contactData);
 
       await this.ensureAliasIsUnique(contactData.alias, contactId);
 
@@ -230,7 +234,8 @@ export default class ContactBusiness {
       fathers_surname: newData.fathers_surname,
       mothers_surname: newData.mothers_surname,
       birthdate: newData.birthdate,
-      alias: newData.alias
+      alias: newData.alias,
+      profile_image: newData.profile_image
     }, { transaction: t });
   }
 
