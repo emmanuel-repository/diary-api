@@ -96,8 +96,6 @@ export default class ContactBusiness {
 
   async updateContact(contactId: number, contactData: any, file: any): Promise<ContactDto> {
 
-    console.log(contactData);
-
     const t = await sequelize.transaction();
 
     try {
@@ -121,8 +119,6 @@ export default class ContactBusiness {
       };
 
      contactData = { ...contactData, profile_image: imageUrl };
-
-     console.log(contactData);
 
       await this.ensureAliasIsUnique(contactData.alias, contactId);
 
