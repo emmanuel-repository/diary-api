@@ -19,7 +19,7 @@ export const ContactDtoSchema = z.object({
   birthdate: z.string(),
   alias: z.string().min(1),
   profile_image: profileImageSchema.optional().nullable(),
-  emails: z.array(EmailDtoSchema).optional().default([]),
-  phones: z.array(PhoneDtoSchema).optional().default([]),
+  emails: z.string(EmailDtoSchema).optional().default('[]'),
+  phones: z.string(PhoneDtoSchema).optional().default('[]'),
 });
 

@@ -32,7 +32,6 @@ export default class ContactController {
 
       const data = req.body;
       const file = req.file;
-
       const createContact = await this.contactBusiness.createContact(data, file);
 
       return res.status(201).json(createContact);
@@ -64,7 +63,8 @@ export default class ContactController {
 
       const { id } = req.params;
       const contactData = req.body;
-      const dataContactToCreate = await this.contactBusiness.updateContact(Number(id), contactData);
+      const file = req.file;
+      const dataContactToCreate = await this.contactBusiness.updateContact(Number(id), contactData, file);
 
       return res.status(200).json(dataContactToCreate);
 

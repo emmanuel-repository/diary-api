@@ -9,6 +9,7 @@ import { mapPhoneToDto } from '../mappers/phone.mapper';
 import { Contact, Email, Phone } from '../models/init-models';
 import { Op } from 'sequelize';
 import path from 'path';
+import fs from 'fs';
 
 export default class ContactBusiness {
 
@@ -27,6 +28,7 @@ export default class ContactBusiness {
   }
 
   async createContact(contactData: any, file: any): Promise<ContactDto | null> {
+
     const t = await sequelize.transaction();
 
     try {
@@ -92,13 +94,36 @@ export default class ContactBusiness {
 
   }
 
-  async updateContact(contactId: number, contactData: any): Promise<ContactDto> {
+  async updateContact(contactId: number, contactData: any, file: any): Promise<ContactDto> {
+
     const t = await sequelize.transaction();
+
     try {
 
       const contact = await this.existRegister(contactId);
 
+      if (file && contact?.profile_image) {
+        const oldImagePath = path.join(__dirname, '../../public/uploads', contact.profile_image);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+      }
+
+      let imageUrl = null;
+
+      if (file) {
+        const ext = path.extname(file.originalname);
+        const safeAlias = contactData.alias.replace(/[^\w\-]/g, '_');
+
+        imageUrl = `${safeAlias}${ext}`
+      };
+
+      contactData.profile = imageUrl;
+
       await this.ensureAliasIsUnique(contactData.alias, contactId);
+
+      if (typeof contactData.emails === 'string') contactData.emails = JSON.parse(contactData.emails);
+      if (typeof contactData.phones === 'string') contactData.phones = JSON.parse(contactData.phones);
 
       const contactToUpdate = await this.updateContactRecord(contact, contactData, t);
       const contactMapper = mapContactToDto(contactToUpdate);
