@@ -29,9 +29,11 @@ export default class ContactController {
     try {
 
       const data = req.body;
-      const createContact = await this.contactBusiness.createContact(data);
+      // const createContact = await this.contactBusiness.createContact(data);
 
-      return res.status(201).json(createContact);
+      // return res.status(201).json(createContact);
+
+      return res.status(201).json(data);
 
     } catch (error) {
 

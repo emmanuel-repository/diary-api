@@ -2,12 +2,20 @@ import { Router } from "express";
 import ContactController from "../controllers/constact.controller";
 import { validate } from "../middlewares/validate.middleware";
 import { ContactDtoSchema } from "../schemas/contact.schema";
+// import { upload } from "../middlewares/multer-handle.middleware";
+import multer from "multer";
 
-const router = Router()
+const router = Router();
+
+const upload = multer({
+  limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB
+  storage: multer.memoryStorage(), // o diskStorage
+});
+
 
 router.get('/user', ContactController.getAllRegisters.bind(ContactController));
 router.get('/user/:id', ContactController.getRegisterById.bind(ContactController))
-router.post('/user', validate(ContactDtoSchema), ContactController.createContact.bind(ContactController));
+router.post('/user', upload.single('profile_image'), ContactController.createContact.bind(ContactController));
 router.delete('/user/:id', ContactController.deleteContact.bind(ContactController));
 router.put('/user/:id', validate(ContactDtoSchema), ContactController.updateContact.bind(ContactController));
 router.delete('/user/email/:id', ContactController.deleteEmail.bind(ContactController));

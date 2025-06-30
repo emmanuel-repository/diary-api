@@ -10,11 +10,12 @@ export interface ContactAttributes {
   mothers_surname: string;
   birthdate: string;
   alias: string;
+  profile_image?: string;
 }
 
 export type ContactPk = "id";
 export type ContactId = Contact[ContactPk];
-export type ContactOptionalAttributes = "id";
+export type ContactOptionalAttributes = "id" | "profile_image";
 export type ContactCreationAttributes = Optional<ContactAttributes, ContactOptionalAttributes>;
 
 export class Contact extends Model<ContactAttributes, ContactCreationAttributes> implements ContactAttributes {
@@ -24,6 +25,7 @@ export class Contact extends Model<ContactAttributes, ContactCreationAttributes>
   mothers_surname!: string;
   birthdate!: string;
   alias!: string;
+  profile_image?: string;
 
   // Contact hasMany Email via contact_id
   emails!: Email[];
@@ -77,6 +79,10 @@ export class Contact extends Model<ContactAttributes, ContactCreationAttributes>
     alias: {
       type: DataTypes.STRING(100),
       allowNull: false
+    },
+    profile_image: {
+      type: DataTypes.STRING(400),
+      allowNull: true
     }
   }, {
     tableName: 'contacts',
