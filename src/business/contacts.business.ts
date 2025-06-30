@@ -8,6 +8,7 @@ import { mapEmailToDto } from '../mappers/email.mapper';
 import { mapPhoneToDto } from '../mappers/phone.mapper';
 import { Contact, Email, Phone } from '../models/init-models';
 import { Op } from 'sequelize';
+import path from 'path';
 
 export default class ContactBusiness {
 
@@ -25,11 +26,25 @@ export default class ContactBusiness {
     return contacts;
   }
 
-  async createContact(contactData: any): Promise<ContactDto | null> {
+  async createContact(contactData: any, file: any): Promise<ContactDto | null> {
     const t = await sequelize.transaction();
 
     try {
+      let imageUrl = null;
+
+      if (file) {
+        const ext = path.extname(file.originalname);
+        const safeAlias = contactData.alias.replace(/[^\w\-]/g, '_');
+
+        imageUrl = `public/uploads/${safeAlias}${ext}`
+      };
+
+      contactData = { ...contactData, profile_image: imageUrl };
+
       await this.ensureAliasIsUnique(contactData.alias);
+
+      if (typeof contactData.emails === 'string') contactData.emails = JSON.parse(contactData.emails);
+      if (typeof contactData.phones === 'string') contactData.phones = JSON.parse(contactData.phones);
 
       const contact = await this.createContactRecord(contactData, t);
       const contactDto = mapContactToDto(contact);
@@ -179,7 +194,8 @@ export default class ContactBusiness {
       fathers_surname: data.fathers_surname,
       mothers_surname: data.mothers_surname,
       birthdate: data.birthdate,
-      alias: data.alias
+      alias: data.alias,
+      profile_image: data.profile_image
     }, { transaction: t });
   }
 

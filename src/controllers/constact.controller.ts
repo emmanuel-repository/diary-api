@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import ContactBusiness from '../business/contacts.business';
+import { profile } from 'console';
+import path from 'path';
 
 export default class ContactController {
 
@@ -15,7 +17,7 @@ export default class ContactController {
 
   static async getRegisterById(req: Request, res: Response, next: any): Promise<any> {
     try {
-      const {id} = req.params;
+      const { id } = req.params;
       const contact = await this.contactBusiness.existRegister(Number(id));
 
       return res.status(200).json(contact);
@@ -29,11 +31,11 @@ export default class ContactController {
     try {
 
       const data = req.body;
-      // const createContact = await this.contactBusiness.createContact(data);
+      const file = req.file;
 
-      // return res.status(201).json(createContact);
+      const createContact = await this.contactBusiness.createContact(data, file);
 
-      return res.status(201).json(data);
+      return res.status(201).json(createContact);
 
     } catch (error) {
 

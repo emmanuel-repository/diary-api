@@ -11,6 +11,7 @@ export const mapContactToDto = (contact: Contact): ContactDto => ({
   mothers_surname: contact.mothers_surname,
   birthdate: contact.birthdate,
   alias: contact.alias,
+  profile_image: contact.profile_image,
   emails: contact.emails?.map(mapEmailToDto) ?? [],
   phones: contact.phones?.map(mapPhoneToDto) ?? []
 });

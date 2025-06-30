@@ -2,16 +2,9 @@ import { Router } from "express";
 import ContactController from "../controllers/constact.controller";
 import { validate } from "../middlewares/validate.middleware";
 import { ContactDtoSchema } from "../schemas/contact.schema";
-// import { upload } from "../middlewares/multer-handle.middleware";
-import multer from "multer";
+import { upload } from "../middlewares/multer-handle.middleware";
 
 const router = Router();
-
-const upload = multer({
-  limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB
-  storage: multer.memoryStorage(), // o diskStorage
-});
-
 
 router.get('/user', ContactController.getAllRegisters.bind(ContactController));
 router.get('/user/:id', ContactController.getRegisterById.bind(ContactController))

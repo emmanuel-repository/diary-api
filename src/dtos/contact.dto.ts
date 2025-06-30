@@ -8,6 +8,7 @@ export interface ContactDto {
   mothers_surname: string;
   birthdate: string;
   alias: string;
+  profile_image?: string
   emails?: EmailDto[];
   phones?: PhoneDto[];
 }
