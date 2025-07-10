@@ -4,14 +4,14 @@ services:
   backend:
     build: .
     container_name: backend
-    expose:
-      - 3000
     env_file:
       - .env
+    ports:
+      - "4000:4000"
     volumes:
       - .:/app
       - /app/node_modules
-    command: npm start
+    command: sh -c "npm run build && npm start"
     restart: always
 
   nginx:
