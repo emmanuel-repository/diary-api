@@ -5,6 +5,7 @@ const config = {
 	app: {
 		port: process.env.PORT,
 		jwtSecret: process.env.JWT_SECRET,
+		corsAccess: process.env.CORS_ACCESS,
 	},
 
 	mysql: {

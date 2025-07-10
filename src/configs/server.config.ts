@@ -26,7 +26,7 @@ export default class Server {
   private configureMiddlewares(): void {
     this.app.use(bodyParser.json({ limit: '500mb' }));
     this.app.use(bodyParser.urlencoded({ limit: '500mb', extended: true }));
-    this.app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+    this.app.use(cors({ origin: configs.app.corsAccess, credentials: true }));
     this.app.use('/public', express.static(path.join(__dirname, '../../public')));
   }
 
