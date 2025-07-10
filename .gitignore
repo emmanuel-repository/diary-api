@@ -9,6 +9,7 @@ build/
 .env.local
 .env.*.local
 .DS_Store
+.env
 
 # Logs
 logs
