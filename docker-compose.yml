@@ -11,6 +11,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - ./public/uploads:/app/public/uploads 
     command: sh -c "npm run build && npm start"
     restart: always
 
