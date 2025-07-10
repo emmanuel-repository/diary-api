@@ -5,10 +5,12 @@ import { PhoneDtoSchema } from './phone.schema';
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-const profileImageSchema = z.instanceof(File).refine((file) => file.size <= MAX_FILE_SIZE, {
-  message: "La imagen no debe superar los 50 MB",
-}).refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
-  message: "Formato inválido. Usa JPG, PNG o WEBP",
+export const profileImageSchema = z.object({
+  originalname: z.string(),
+  mimetype: z.string().refine((type) => ['image/png', 'image/jpeg'].includes(type), {
+    message: 'Solo se permiten PNG o JPEG',
+  }),
+  size: z.number().max(MAX_FILE_SIZE, 'La imagen es demasiado grande'),
 });
 
 export const ContactDtoSchema = z.object({

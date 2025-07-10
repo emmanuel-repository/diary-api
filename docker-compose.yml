@@ -24,3 +24,19 @@ services:
     depends_on:
       - backend
     restart: always
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: diary
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./nas/diary_2025-06-29_214743.sql:/docker-entrypoint-initdb.d/diary_2025-06-29_214743.sql:ro
+    restart: always
+
+volumes:
+  mysql_data:
