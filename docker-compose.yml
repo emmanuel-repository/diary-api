@@ -13,6 +13,9 @@ services:
       - /app/node_modules
       - ./public/uploads:/app/public/uploads 
     command: sh -c "npm run build && npm start"
+    depends_on:
+        - mysql
+        - fluentd
     logging:
       driver: "fluentd"
       options:
@@ -73,17 +76,16 @@ services:
     restart: always
 
   fluentd:
-    image: fluent/fluentd:v1.14
+    image: fluent/fluentd-kubernetes-daemonset:v1.14.2-debian-elasticsearch7-1.0
     container_name: fluentd
-    build:
-      context: ./fluentd
-    volumes:
-      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/log:/var/log:ro
     ports:
       - "24224:24224"
       - "24224:24224/udp"
+    volumes:
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+    environment:
+      - FLUENT_ELASTICSEARCH_HOST=elasticsearch
+      - FLUENT_ELASTICSEARCH_PORT=9200
     depends_on:
       - elasticsearch
     restart: always
