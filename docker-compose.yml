@@ -16,10 +16,11 @@ services:
     depends_on:
         - mysql
         - fluentd
+        - elasticsearch
     logging:
       driver: "fluentd"
       options:
-        fluentd-address: localhost:24224
+        fluentd-address: host.docker.internal:24224
         tag: backend
     restart: always
 
@@ -80,7 +81,6 @@ services:
     container_name: fluentd
     ports:
       - "24224:24224"
-      - "24224:24224/udp"
     volumes:
       - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
     environment:

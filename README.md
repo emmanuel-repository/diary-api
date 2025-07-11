@@ -26,3 +26,10 @@ el proyecto cuenta con un archivo de variables de entorno con la siguiente varia
   DB_NAME=login-proyect
 
 En la carpeta de nas se encuentra un Dump de la base de datos.
+
+Para crear la dockerizacion del API se tiene que ejecutar los siguientes comandos:
+
+  - docker-compose up --build -d elasticsearch fluentd 
+  - docker-compose up --build -d mysql backend
+  - docker-compose up --build -d nginx
+  - docker-compose up --build -d kibana
